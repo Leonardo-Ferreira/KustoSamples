@@ -1,0 +1,6 @@
+requests
+| where timestamp > startofday(ago(500d))
+| where dayofmonth(timestamp) in (1,2,29,30,31) 
+| extend  newDate = todatetime(strcat("20210101 ", format_datetime(timestamp,"HH:mm:ss")))
+| summarize count() by bin(newDate, 1m), tostring(monthofyear(timestamp))
+| render timechart 
